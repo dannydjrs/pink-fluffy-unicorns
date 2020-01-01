@@ -123,29 +123,35 @@ public class Company implements ICompany {
     double totalPrice = 0.0;
     double totalVolume = 0;
 
-    for (Map.Entry<Calendar, HistoricalData.Record> date : pastData.entrySet()) {
+    if (pastData != null) {
+        for (Map.Entry<Calendar, HistoricalData.Record> date : pastData.entrySet()) {
 
-      if (date.getValue().close != -1.0)
-        totalPrice += date.getValue().close;
+          if (date.getValue().close != -1.0)
+            totalPrice += date.getValue().close;
 
-      if (date.getValue().volume != -1.0)
-        totalVolume += date.getValue().volume;
+          if (date.getValue().volume != -1.0)
+            totalVolume += date.getValue().volume;
 
-      if (date.getValue().high != -1.0 && high < date.getValue().high) {
-        high = date.getValue().high;
-      }
+          if (date.getValue().high != -1.0 && high < date.getValue().high) {
+            high = date.getValue().high;
+          }
 
-      if (date.getValue().low != -1.0 && low > date.getValue().low) {
-        low = date.getValue().low;
-      }
+          if (date.getValue().low != -1.0 && low > date.getValue().low) {
+            low = date.getValue().low;
+          }
+        }
 
+        this.yearHigh = high;
+        this.yearLow = low;
+        this.averageClose = totalPrice / pastData.size();
+        this.averageVolume = totalVolume / pastData.size();
+
+    } else {
+        this.yearHigh = 0;
+        this.yearLow = 0;
+        this.averageClose = 0;
+        this.averageVolume = 0;
     }
-
-    this.yearHigh = high;
-    this.yearLow = low;
-    this.averageClose = totalPrice / pastData.size();
-    this.averageVolume = totalVolume / pastData.size();
-
   }
 
   public HistoricalData getPastData() {
